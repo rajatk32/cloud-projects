@@ -1,0 +1,7 @@
+Horizontal scaling involves adding more nodes to the system. An example would be scaling out from a single m3.medium instance to three m3.medium instances.
+
+1. Write code in Python, Java or shell script using the AWS APIs to launch a m3.medium load generator instance. 
+2. In the same program write code to launch a m3.medium data center instance and start the horizontal scaling test by requesting the URL: http://<your-load-generator-instance-dns-name>/test/horizontal?dns=<your-instance-dns-name>. The response will contain the testId which you need to save for use later in querying the current RPS. The code should scale out horizontally the number of instances in the data center until the cumulative RPS of all connected instances in the data center reaches 4000.
+3. Monitor the current RPS by parsing the logs available at http://<your-load-generator-instance-dns-name>/log?name=test.<testId>.log (INI parsers available for Java and Python are highly recommended).
+4. If the current RPS is less than the required RPS (4000), spin up a m3.medium instance through code and add it to the load generator by calling the URL: http://<your-load-generator-instance-dns-name>/test/horizontal/add?dns=<your-instance-dns-name>.
+5. Once the target RPS has been met, quit the program. Do not terminate your instances.
